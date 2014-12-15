@@ -18,32 +18,8 @@ CroogoNav::add('sidebar', 'webshop.children.configuration.children.payment_metho
 	),
 ));
 
+Croogo::hookHelper('*', 'WebshopPayments.Payment');
+
 App::build(array(
 	'PaymentProvider' => array('%s' . 'PaymentProvider' . DS)
 ), App::REGISTER);
-
-App::uses('CakeEventListener', 'Event');
-class PaymentsListener implements CakeEventListener {
-
-	public function implementedEvents() {
-		return array(
-			'Payment.statusUpdate' => 'updateBuyStatistic',
-		);
-	}
-
-	public function __construct() {
-		$this->Payment = ClassRegistry::init('WebshopPayments.Payment');
-	}
-
-
-	public function updateBuyStatistic($event) {
-		debug($event->data);
-
-		$this->Payment->id = $event->data['payment']['id'];
-		$this->Payment->saveField('status', $event->data['status']);
-	}
-}
-
-$statistics = new PaymentsListener();
-CakeEventManager::instance()->attach($statistics);
-

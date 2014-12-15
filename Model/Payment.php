@@ -4,6 +4,10 @@ App::uses('WebshopPaymentsAppModel', 'WebshopPayments.Model');
 
 class Payment extends WebshopPaymentsAppModel {
 
+	public $actsAs = array(
+		'Webshop.Status'
+	);
+
 	public $belongsTo = array(
 		'WebshopPayments.PaymentMethod'
 	);
@@ -11,10 +15,18 @@ class Payment extends WebshopPaymentsAppModel {
 	public function afterFind($results, $primary = false) {
 		if ($primary) {
 			foreach ($results as &$result) {
-				$result[$this->alias]['redirect_route'] = unserialize($result[$this->alias]['redirect_route']);
+				if (isset($result[$this->alias]['redirect_route'])) {
+					$result[$this->alias]['redirect_route'] = unserialize($result[$this->alias]['redirect_route']);
+				} else {
+					$result[$this->alias]['redirect_route'] = false;
+				}
 			}
 		} else {
-			$results['redirect_route'] = unserialize($results['redirect_route']);
+			if (isset($results['redirect_route'])) {
+				$results['redirect_route'] = unserialize($results['redirect_route']);
+			} else {
+				$results['redirect_route'] = false;
+			}
 		}
 
 		return $results;
@@ -27,6 +39,5 @@ class Payment extends WebshopPaymentsAppModel {
 
 		return true;
 	}
-
 
 }

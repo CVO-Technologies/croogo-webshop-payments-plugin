@@ -43,7 +43,14 @@ class PaymentMethodsController extends WebshopPaymentsAppController {
 	}
 
 	public function index() {
+		$paymentMethods = $this->PaymentMethod->find('all', array(
+			'conditions' => array(
+				'PaymentMethod.active'    => true,
+				'PaymentMethod.available' => true,
+			)
+		));
 
+		$this->set(compact('paymentMethods'));
 	}
 
 	public function get_usable($amount) {
@@ -51,6 +58,15 @@ class PaymentMethodsController extends WebshopPaymentsAppController {
 			'conditions' => array(
 				'PaymentMethod.minimal_amount >=' => $amount,
 				'PaymentMethod.maximum_amount <=' => $amount,
+			)
+		));
+	}
+
+	public function get_active() {
+		return $this->PaymentMethod->find('all', array(
+			'conditions' => array(
+				'PaymentMethod.active' => true,
+				'PaymentMethod.available' => true,
 			)
 		));
 	}
