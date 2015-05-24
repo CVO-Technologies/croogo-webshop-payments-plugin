@@ -1,10 +1,17 @@
 {
 	"name": "cvo-technologies/croogo-webshop-payments-plugin",
-	"type": "croogo-plugin",
+	"type": "cakephp-plugin",
 	"require": {
-		"cvo-technologies/croogo-webshop-plugin": "dev-master"
+        "cvo-technologies/croogo-webshop-plugin": "3.0.*@dev"
 	},
-	"extra": {
-		"installer-name": "WebshopPayments"
-	}
+    "autoload": {
+        "psr-4": {
+            "Webshop\\Payments\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Webshop\\Payments\\Test\\": "tests"
+        }
+    }
 }
